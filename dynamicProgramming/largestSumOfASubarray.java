@@ -25,3 +25,21 @@ public class Solution {
     return new int[]{maxSum, maxStart, maxEnd};
   }
 }
+
+//only returns the max sum value
+//M[i] represents the largest sum from 0th to ith element
+//M[i] must include ith element since subarray is contiguous!!!
+//improve space to O(1)
+public class Solution {
+  public int largestSum(int[] array) {
+    int M = 0;
+    int max = Integer.MIN_VALUE;
+    if (array == null || array.length == 0) return max;
+    for (int i = 0; i < array.length; i++) {
+      if (M < 0) M = array[i];
+      else M += array[i];
+      max = Math.max(max, M);
+    }
+    return max;
+  }
+}
