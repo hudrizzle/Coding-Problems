@@ -38,3 +38,23 @@ public class Solution {
     return root;
   }
 }
+
+
+//method2--------------------------------------------
+//time：O（n）、space complexity：O（height）？
+public class Solution {
+  public TreeNode reconstruct(int[] inOrder, int[] preOrder) {
+    int[] preIndex = new int[]{0};
+    int[] inIndex = new int[]{0};
+    return reconstructRec(inOrder, preOrder, preIndex, inIndex, Integer.MAX_VALUE);
+  }
+  //inputs must be consistent with subproblems
+  private TreeNode reconstructRec(int[] in, int[] pre, int[] preIdx, int[] inIdx, int target) {
+    if (inIdx[0] >= in.length || in[inIdx[0]] == target) return null;
+    TreeNode root = new TreeNode(pre[preIdx[0]++]);
+    root.left = reconstructRec(in, pre, preIdx, inIdx, root.key);
+    inIdx[0]++;
+    root.right = reconstructRec(in, pre, preIdx, inIdx, target);
+    return root;
+  }
+}
