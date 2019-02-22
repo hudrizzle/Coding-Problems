@@ -47,3 +47,29 @@ public class Solution {
     else return false;
   }
 }
+
+----------------------------- METHOD2-> refer to LCA
+//tree recursion -> LCA 3 steps:
+//ask children: level where found a/b (if not found, return -1)
+//this level: check left, right-> update res if necessary(to true) -> when left == right and left - curDep > 1
+//return the one that's not -1, or return max(left, right), why? necessary to continue? 
+//time: O(n), space: O(height)
+public class Solution {
+  public boolean isCousin(TreeNode root, int a, int b) {
+    boolean[] res = new boolean[]{false};//global res indicating if a and b are cousin
+    isCousinRec(root, a, b, 0, res);
+    return res[0];
+  }
+  private int isCousinRec(TreeNode root, int a, int b, int curDep, boolean[] res){
+    //base case
+    if (root == null) return -1;
+    if (root.key == a || root.key == b) return curDep;
+    //ask children return depth of a or b if found, or return -1 if not
+    int left = isCousinRec(root.left, a, b, curDep + 1, res);
+    int right = isCousinRec(root.right, a, b, curDep + 1, res);
+    //in this level, check if need to update res to true, only when:
+    if (left == right && left - curDep > 1) res[0] = true;
+    //return depth value to root's parent
+    return Math.max(left, right);
+  }
+}
