@@ -1,11 +1,12 @@
 package trial;
-//time: O(n^0.5)?   space:O(n)
+//time: O(n^1.5)   space:O(n)
 public class cutMinSquares {
 	public static void main(String[] args) {
 		int ans = minCutSquares(4);
 		System.out.println(ans);
 	}
 	public static int minCutSquares(int n) {
+		if (n <= 0) return 0;
 		int[] M = new int[n + 1];//from M[0] to M[n]
 		//base
 		M[0] = 0;
