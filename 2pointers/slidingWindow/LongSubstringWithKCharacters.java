@@ -1,8 +1,8 @@
 //2 pointers with non-fixed size
 public class Solution {
   public String longest(String input, int k) {
-    if (input == null || input.length() == 0) return input;
-    if (k == 0) return "";//|| input.length() < k
+    if (k == 0 && input.length() == 0) return "";
+    if (input == null || input.length() == 0) return null;
     //slow:1st letter of substring    fast: 1st letter to be checked
     int slow = 0, fast = 0;
     int[] maxPos = new int[]{0,0};
@@ -26,6 +26,6 @@ public class Solution {
         maxPos[1] = fast - 1;
       }
     }
-    return input.substring(maxPos[0], maxPos[1] + 1);
+    return freq.size() < k ? null : input.substring(maxPos[0], maxPos[1] + 1);
   }
 }
