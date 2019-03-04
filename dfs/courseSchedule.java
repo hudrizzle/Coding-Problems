@@ -44,3 +44,65 @@ public class Solution {
     return map;
   }
 }
+
+
+//courseScheduleii: find the order of finishing all given courses
+        /* DFS post order traversal
+        1. Build a hashMap<Integer, Set<Integer>> to represent the course graph
+            {course : prerequisites}
+        2. Use a hashSet visited to memorize visited graph nodes. 
+            Use a list<Integer> result to store finished courses
+        3. Post order traverse the graph
+        */
+//time: O(v + e) space:O(v)
+//use dfs to build res path
+public class Solution {
+  public int[] findOrder(int num, int[][] pre) {
+    int[] order = new int[num];
+    if (pre == null || num == 0 || pre.length == 0 || pre[0].length == 0) return order;
+    //first, get graph, but note: map<cur, List<preCourses>> 
+    //since you need to find the prerest course even though you entered from any node
+    Map<Integer, List<Integer>> map = getGraph(num, pre);
+    //use visited to dedup, also to record the order of final result!
+    //use curPath to check cycle
+    Set<Integer> visited = new HashSet<>();
+    List<Integer> res = new ArrayList<>();
+    Set<Integer> curPath = new HashSet<>();
+    //traverse each node, check if there's cycle by dfs
+    for (int i = 0; i < num; i++) {
+      if (containsCycle(i, visited, res, curPath, map)) return new int[0];
+    }
+    //order = res.toArray(order); cannot use toArray()??
+    for (int i = 0; i < num; i++) {
+      order[i] = res.get(i);
+    }
+    return order;
+  }
+  //true: invalid, contains cycle
+  private boolean containsCycle(int start, Set<Integer> visited, List<Integer> res,
+                                Set<Integer> curPath, Map<Integer, List<Integer>> map) {
+    //basic case
+    if (visited.contains(start)) return false;
+    if (curPath.contains(start)) return true;
+    //recursion rule: add to curPath, check it's neiboughers if contains cycle->no cycle, add to res, return false
+    curPath.add(start);
+    for (Integer pre : map.get(start)) {
+      if (containsCycle(pre, visited, res, curPath, map)) return true;
+    }
+    visited.add(start);
+    res.add(start);
+    curPath.remove(start);
+    return false;
+  }
+  //build graph: <cur, List<pre>>
+  private Map<Integer, List<Integer>> getGraph(int num, int[][] pre) {
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    for (int i = 0; i < num; i++) map.put(i, new ArrayList<Integer>());
+    for (int i = 0; i < pre.length; i++) {
+      int preCou = pre[i][1];
+      int postCou = pre[i][0];
+      map.get(postCou).add(preCou);
+    }
+    return map;
+  }
+}
