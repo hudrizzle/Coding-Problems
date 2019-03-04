@@ -1,5 +1,5 @@
 //dfs method: starting from each node to check if any cycle exist in graph
-//time: O(v^2)
+//time: O(v + e) since visited set works as deduplicate, in total checked v + e times
 //space:O(3v + level) -> level is number of callstack, could be v at most
 
 public class Solution {
