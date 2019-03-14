@@ -1,0 +1,11 @@
+//dont use equals() dont use ==
+public class Solution {
+  public boolean isIdentical(TreeNode one, TreeNode two) {
+    //base
+    if (one == null && two == null) return true;
+    if (one == null || two == null) return false;
+    //this level - check roots
+    if (one.key != two.key) return false;
+    return isIdentical(one.left, two.left) && isIdentical(one.right, two.right);
+  }
+}
