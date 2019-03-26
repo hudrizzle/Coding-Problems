@@ -28,3 +28,18 @@ public class Solution {
     return stack.size() == 1 && stack.peek().equals("#");
   }
 }
+
+//method2. using in-degree, out-degree. diff = out-in. make sure its always >= 0, and final diff should be 0
+public class Solution {
+  public boolean isValidSerialization(String preorder) {
+    //corner cases
+    if (preorder == null || preorder.length() == 0) return false;
+    String[] input = preorder.split(",");
+    int diff = 1;
+    for (String str : input) {
+      if (--diff < 0) return false;//each node should have 1 indegree
+      if (!str.equals("#")) diff += 2;//nodes which are not null should have 2 out degree
+    }
+    return diff == 0;
+  }
+}
