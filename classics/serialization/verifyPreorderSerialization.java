@@ -30,6 +30,7 @@ public class Solution {
 }
 
 //method2. using in-degree, out-degree. diff = out-in. make sure its always >= 0, and final diff should be 0
+//note: if works because it's preorder serialization. if it's inorder serialization, will encouter children before root, diff will < 0
 public class Solution {
   public boolean isValidSerialization(String preorder) {
     //corner cases
