@@ -20,7 +20,7 @@ public class Solution {
         if (size == 2) return Math.min(nums[left], nums[right]);
         
         //recursion: divide and conquer
-        if (nums[left] <= nums[right]) return nums[left];//sorted 
+        if (nums[left] < nums[right]) return nums[left];//sorted 
         else {
             int mid = left + (right - left) / 2;
             int res = Math.min(findMin(nums, left, mid), findMin(nums, mid + 1, right));
