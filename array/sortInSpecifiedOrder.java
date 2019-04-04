@@ -59,6 +59,7 @@ public class Solution {
 }
 
 //3rd method: customize a comparator class based on A2
+//time: O(mlogm + n), space: O(m + n)
 public class sortInSpecifiedOrder {
     public static void main(String[] args) {
         int[] A1 = new int[]{2, 1, 2, 5, 7, 1, 9, 3};
@@ -107,4 +108,47 @@ public class sortInSpecifiedOrder {
             array[i] = arrayInteger[i];
         }
     }
+}
+
+/*4th method: map records A2:<number, index>, traverse A1, 
+put numbers that are not in A2 into pq, count freq of numbers that are in A2
+*/
+//time: O(mlogm + n), space:O(m + n)
+public class Solution {
+  public int[] sortSpecial(int[] A1, int[] A2) {
+    //corner cases
+    if (A1 == null || A1.length == 0) return A1;
+    if (A2 == null || A2.length == 0) {
+      Arrays.sort(A1);
+      return A1;
+    }
+    int[] freq = new int[A2.length];
+    PriorityQueue<Integer> pq = new PriorityQueue<>();
+    Map<Integer, Integer> position = new HashMap<>();
+    for (int i = 0; i < A2.length; i++) position.put(A2[i], i);   //n
+    //traverse elements in A1        //mlogm??
+    for (int j = 0; j < A1.length; j++) {
+      int cur = A1[j];
+      Integer index = position.get(cur);
+      if (index == null) pq.offer(cur);
+      else freq[index]++;
+    }
+    //traverse A2 + freq array first, then traverse pq to put elements into res list
+    List<Integer> res = new ArrayList<>();
+    for (int index = 0; index < A2.length; index++) {//m times at most
+      int frequency = freq[index];
+      while (frequency > 0) {
+        res.add(A2[index]);
+        frequency--;
+      }
+    }
+    while (!pq.isEmpty()) {//mlogm at most
+      res.add(pq.poll());
+    }
+    
+    for (int i = 0; i < A1.length; i++) {//m
+      A1[i] = res.get(i);
+    }
+    return A1;
+  }
 }
