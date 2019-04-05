@@ -118,6 +118,9 @@ public class MyHashMap<K,V> {
 		int code = key.hashCode();
 		return code & 0x7fffffff;//? bit manipulation for what?
 	}
+   	private boolean equalsKey(K a, K b) {
+        	return a == b || a != null && a.equals(b);
+    	}
 	private boolean needRehashing() {
 		return size > DEFAULT_LOAD_FACTOR * array.length;
 	}
