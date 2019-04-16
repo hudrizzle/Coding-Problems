@@ -56,3 +56,22 @@ public class Solution {
     return ans;
   }
 }
+//similar to above method
+//use stack, but put into list in a reverse order. (root, right, left) reverse, so put left first, then right
+public class Solution {
+  public List<Integer> postOrder(TreeNode root) {
+    List<Integer> res = new ArrayList<>();
+    if (root == null) return res;
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    stack.offerFirst(root);
+    while (!stack.isEmpty()) {
+      TreeNode cur = stack.pollFirst();
+      res.add(0, cur.key);//always add cur node to the head of list
+      if (cur.left != null) stack.offerFirst(cur.left);
+      if (cur.right != null) stack.offerFirst(cur.right);
+    }
+    return res;
+  }
+}
+
+//not use stack but just a pointer instead?
