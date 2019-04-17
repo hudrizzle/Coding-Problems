@@ -79,3 +79,41 @@ public class Solution<K, V> {
     }
   }
 }
+
+
+/*
+用LinkedHashMap模拟Queue记录每个entry被用的先后顺序：
+(1) 任何被get或被set的元素都会被移到LinkedHashMap的最后；
+(2) 若新插入元素后，LinkedHashMap超出capacity，则移除首位元素。
+*/
+
+public class LRUCache {
+    Map<Integer, Integer> map = new LinkedHashMap<Integer, Integer>();
+    int capacity;
+    
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+    
+    
+    public void set(int key, int value) {
+        if (map.containsKey(key)) {
+            map.remove(key);
+            map.put(key, value);
+            return;
+        }
+        
+        map.put(key, value);
+        
+        if (map.size() > capacity) map.remove(map.entrySet().iterator().next().getKey());
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key))
+            return -1;
+            
+        int val = map.remove(key);
+        map.put(key, val);
+        return val;
+    }
+}
