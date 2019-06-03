@@ -1,6 +1,6 @@
 /*STEPS: 1. Build map to represent graphs
 * 2. calculate in-degree
-* 3. topological sorting based on changing in-degree
+* 3. topological sorting based on changing in-degree(note the corner case: res string size less than number of all nodes since there're cycles)
 *NOTE: as we should return the topo order with lexicographical order, we should use PriorityQueue
 * instead of a FIFO Queue
 */
