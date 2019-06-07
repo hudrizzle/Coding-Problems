@@ -1,0 +1,36 @@
+//time: O(h), space: recursion- O(h), iterative- O(1)
+
+
+//recursion: insert key into subtree with root, return root node of updated tree 
+public class Solution {
+  public TreeNode insert(TreeNode root, int key) {
+    //corner case: empty subtree
+    if (root == null) return new TreeNode(key);
+    //recursion rule: after comparison, go left or right
+    if (root.key < key) root.right = insert(root.right, key);
+    else if (root.key > key) root.left = insert(root.left, key);
+    //if root.key == key, no need to insert
+    return root;
+  }
+}
+
+
+//iterative way: need to record the last node where cur passed by
+public class Solution {
+  public TreeNode insert(TreeNode root, int key) {
+    //empty tree
+    if (root == null) return new TreeNode(key);
+    TreeNode cur = root, last = null;
+    //loop until cur goes to null position, last must be leaf
+    while (cur != null) {
+        last = cur;
+        if (cur.key == key) return root;
+        if (cur.key > key) cur = cur.left;
+        else if (cur.key < key) cur = cur.right;
+    }
+    //check relationship of last and new node
+    if (last.key > key) last.left = new TreeNode(key);
+    else last.right = new TreeNode(key);
+    return root;
+  }
+}
