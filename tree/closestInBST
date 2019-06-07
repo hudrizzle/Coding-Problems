@@ -1,0 +1,35 @@
+//time: O(h), space: recursion- O(h), iterative-O(1)
+
+
+//recursion: find closest num fron subtree starting with root
+public class Solution {
+  public int closest(TreeNode root, int target) {
+    //corner case: given tree is empty
+    if (root == null) return -1;
+    return closestRec(root, target);
+  }
+  public int closestRec(TreeNode root, int target) {
+    TreeNode next = root.key < target ? root.right : root.left;//root can't be null!!!
+    //base case: leaf node
+    if (next == null) return root.key;
+    //recursion rule
+    int nextclose = closestRec(next, target);
+    return Math.abs(nextclose - target) < Math.abs(root.key - target) ? nextclose : root.key;
+  }
+}
+
+//iterative: maintain a optimal value, update it while loop
+public class Solution {
+  public int closest(TreeNode root, int target) {
+    //corner case: given tree is empty
+    if (root == null) return -1;
+    //don't need to initialize closest = -1 since already checked corner case at first
+    int closest = root.key;
+    while (root != null) {
+      //root must be not null. -> safe comparison, then updating closest
+      if (Math.abs(root.key - target) < Math.abs(closest - target)) closest = root.key;
+      root = root.key < target? root.right : root.left; 
+    }
+    return closest;
+  }
+}
