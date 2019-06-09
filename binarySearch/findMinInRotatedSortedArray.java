@@ -48,3 +48,35 @@ public class Solution {
         //only 2 elements left to be checked
         return nums[l] < nums[r] ? nums[l] : nums[r];
     }
+
+
+public class Solution {
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     * draw plot to help. nums[0] or nums[nums.length - 1] can be virtual target
+     * to decide where mid is, and then rule out half
+     * time: O(logn), space: O(1)
+     */
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return -1;
+        
+        // 如果最后一个数>=第一个数说明数组没有翻转，直接返回第一个数
+        if (nums[nums.length-1] >= nums[0])
+            return nums[0];
+            
+        // 通过判断属于rotation的左边或者右边来决定 往左或者往右搜索
+        int start = 0, end = nums.length-1;
+        while (start+1 < end) {
+            int mid = start + (end-start)/2;
+            //大于等于第一个数说明在左边，往右搜索
+            if (nums[mid] >= nums[0])
+                start = mid;
+            else //小于第一个数说明在右边，往左搜索
+                end = mid;
+        }
+        
+        return Math.min(nums[start],nums[end]);
+    }
+}
