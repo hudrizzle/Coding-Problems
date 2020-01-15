@@ -117,3 +117,97 @@ public class LRUCache {
         return val;
     }
 }
+
+
+
+/** 1.10 second time. self study
+ **/
+
+public class LRUCache<K, V> {
+    public static class ListNode<K, V> {
+        K key;
+        V value;
+        ListNode<K, V> next;
+        ListNode<K, V> prev;
+
+        public ListNode(K key, V value) {
+            this.key = key;
+            this.value = value;
+            // this.next = null;
+            // this.prev = null;
+        }
+    }
+
+    private ListNode<K, V> head;
+    private ListNode<K, V> tail;
+    private Map<K, ListNode<K, V>> map;
+    private final int limit;
+
+    public LRUCache(int limit) {
+        map = new HashMap<>();
+        this.limit = limit;
+    }
+
+    // a new <Q,A> comes in
+    public void set(K key, V value) {
+        ListNode<K, V> node = null;
+        // if contained in Map: update position in LL,
+        if (map.containsKey(key)) {
+            node = map.get(key);
+            node.value = value;// update its value
+            remove(node);
+        }
+        // if not in Map: append to tail of LL, add to Map; then remove the oldest from LL and map
+        else {
+            node = new ListNode<K, V>(key, value);
+        }
+        append(node);
+        if (map.size() > limit)
+            remove(head);
+    }
+
+    // remove both from map and ll -> then return the node itself
+    private ListNode<K, V> remove(ListNode<K, V> node) {
+        map.remove(node.key);
+        if (node.prev != null) {
+            node.prev.next = node.next;
+        }
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        }
+        if (node == head) {
+            head = node.next;
+        }
+        if (node == tail) {
+            tail = node.prev;
+        }
+        node.next = node.prev = null;
+        return node;
+    }
+
+    // append the node to map and LL
+    private ListNode<K, V> append(ListNode<K, V> node) {
+        map.put(node.key, node);
+        // corner case: no elements
+        if (head == null)
+            head = tail = node;
+        else {
+            tail.next = node;
+            node.prev = tail;
+            // node.next = null;//unnecessary
+            tail = node;
+        }
+        return node;
+    }
+
+    public V get(K key) {
+        if (map.containsKey(key)) {
+            ListNode<K, V> node = map.get(key);
+            remove(node);
+            append(node);
+            return node.value;
+        }
+        else
+            return null;// not in cache
+    }
+}
