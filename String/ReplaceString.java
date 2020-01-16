@@ -82,3 +82,24 @@ public class Solution {
     return matches;
   }
 }
+
+/**
+ M2. use StringBuilder
+ String  indexOf(String src, int fromIndex)
+ */
+public class Solution {
+  public String replace(String input, String source, String target) {
+    StringBuilder sb = new StringBuilder();
+    int fromIndex = 0;
+    int matchIndex = input.indexOf(source, fromIndex);
+    while (matchIndex != -1) {
+      sb.append(input, fromIndex, matchIndex).append(target);
+      //next time starting from matchIndex + s.length()
+      //to find if we have later matches
+      fromIndex = matchIndex + source.length();
+      matchIndex = input.indexOf(source, fromIndex);
+    }
+    sb.append(input, fromIndex, input.length());
+    return sb.toString();
+  }
+}
