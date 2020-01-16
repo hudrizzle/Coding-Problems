@@ -1,5 +1,6 @@
 //difficulty is to figure out how to define m, lm, rm based on different situations
 //assume array not null. not empty.
+//nlogn time, in place so O1 for space
 public class Solution {
   public int[] reorder(int[] array) {
     int len = array.length;
