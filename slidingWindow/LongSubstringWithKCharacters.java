@@ -35,7 +35,7 @@ public class Solution {
 //a little improvement: use treemap to move slow directly to last index of furthest element
 //treemap<index, character>   revered to map<character, index>
 //T: same -> O(n)
-
+//fast points to the rightmost index of the window, slow points to the last index before the valid sliding window!
 public class Solution {
   public String longest(String input, int k) {
     if (k == 0 && input.length() == 0) return "";
@@ -73,5 +73,75 @@ public class Solution {
       fast++;
     }
     return lastIndex.size() < k ? null : input.substring(maxPos[0], maxPos[1] + 1);
+  }
+}
+
+/** 1.16 solution
+ * size = right - left because right points to the element to be explored
+ * bug: check map.size() == k to update max and start location!
+ * and consider the corner case: "aaaaaa" and k = 2, then map.size() < 2 always, check when returning.
+ * improve: can move left faster in one step: need a TreeMap or sth to record the latest index of the characters in the window
+ * can be cleaner
+ */
+public class Solution {
+  public String longest(String str, int k) {
+//corner cases:
+    if (str == null || str.length() == 0) return str;
+    Map<Character, Integer> frequency = new HashMap<>();
+    int max = 0;
+    int start = 0;
+    int left = 0;
+    int right = 0;
+    while (right < str.length()) {
+      if (frequency.size() == k && !frequency.containsKey(str.charAt(right))){
+        Integer cnt = frequency.get(str.charAt(left));
+        if (cnt == 1) frequency.remove(str.charAt(left));
+        else frequency.put(str.charAt(left), cnt - 1);
+        left++;
+      }else {
+        Integer cnt = frequency.get(str.charAt(right));
+        if (cnt == null) frequency.put(str.charAt(right), 1);
+        else frequency.put(str.charAt(right), cnt + 1);
+        right++;
+      }
+      if (max < right - left) {//bug1 -  if (frequency.size() == k && max < right - left)
+        max = right - left;
+        start = left;
+      }
+    }
+    return str.substring(start, start + max);//bug2 return frequency.size() < k ? null : str.substring(start, start + max);
+  }
+}
+
+/**
+ *
+ * 473. Longest Substring with At Most K Distinct Characters
+ **/
+public class Solution {
+  public int lengthOfLongestSubstringKDistinct(String str, int k) {
+    //corner cases:
+    if (str == null || str.length() == 0) return 0;
+    Map<Character, Integer> frequency = new HashMap<>();
+    int[] maxPos = new int[2];
+    int left = 0;
+    int right = 0;
+    while (right < str.length()) {
+      if (frequency.size() == k && !frequency.containsKey(str.charAt(right))){
+        Integer cnt = frequency.get(str.charAt(left));
+        if (cnt == 1) frequency.remove(str.charAt(left));
+        else frequency.put(str.charAt(left), cnt - 1);
+        left++;
+      }else {
+        Integer cnt = frequency.get(str.charAt(right));
+        if (cnt == null) frequency.put(str.charAt(right), 1);
+        else frequency.put(str.charAt(right), cnt + 1);
+        right++;
+      }
+      if (maxPos[1] - maxPos[0] + 1 < right - left) {
+        maxPos[0] = left;
+        maxPos[1] = right - 1;
+      }
+    }
+    return maxPos[1] - maxPos[0] + 1;
   }
 }

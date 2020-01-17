@@ -74,7 +74,7 @@ public List<Integer> allAnagrams(String target, String source) {
       if (cnt == 1) {
         matched++;
       }
-      if (cnt == 0) {
+      if (cnt == 0) {//don't  need to
         matched--;
       }
       if (matched == frequency.size()) {
